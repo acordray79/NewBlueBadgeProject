@@ -55,15 +55,31 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BBShopAdmin.cs" />
-    <Compile Include="BBShopCustomer.cs" />
     <Compile Include="BBShopProduct.cs" />
     <Compile Include="BBShopTransaction.cs" />
     <Compile Include="IdentityModels.cs" />
+    <Compile Include="Migrations\201905131419328_InitialCreate.cs" />
+    <Compile Include="Migrations\201905131419328_InitialCreate.Designer.cs">
+      <DependentUpon>201905131419328_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201905131733053_adminupdate.cs" />
+    <Compile Include="Migrations\201905131733053_adminupdate.Designer.cs">
+      <DependentUpon>201905131733053_adminupdate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201905131419328_InitialCreate.resx">
+      <DependentUpon>201905131419328_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905131733053_adminupdate.resx">
+      <DependentUpon>201905131733053_adminupdate.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

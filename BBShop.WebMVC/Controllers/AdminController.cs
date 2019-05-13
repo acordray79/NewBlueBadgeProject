@@ -11,16 +11,18 @@ namespace BBShop.WebMVC.Controllers
 {
     public class AdminController : Controller
     {
+        AdminService _service = new AdminService();
         // GET: Admin
         public ActionResult Index()
         {
-            var service = CreateAdminService();
-            var model = service.GetCustomer();
+            var model = _service.GetCustomer();
             return View(model);
         }
         // GET: Create
         public ActionResult Create()
         {
+            CustomerService custSvc = new CustomerService(Guid.Parse(User.Identity.GetUserId()));
+            ViewBag.CustomerID = new SelectList(custSvc.GetCustomer(), "CustomerID", "FullName");
             return View();
         }
 
@@ -31,9 +33,8 @@ namespace BBShop.WebMVC.Controllers
         {
             if (!ModelState.IsValid) return View(model);
 
-            var service = CreateAdminService();
 
-            if (service.CreateAdmin(model))
+            if (_service.CreateAdmin(model))
             {
                 TempData["SaveResult"] = "Admin was created.";
                 return RedirectToAction("Index");
@@ -45,21 +46,21 @@ namespace BBShop.WebMVC.Controllers
         }
         public ActionResult Details(int id)
         {
-            var svc = CreateAdminService();
-            var model = svc.GetAdminByID(id);
+            var model = _service.GetAdminByID(id);
 
             return View(model);
         }
         public ActionResult Edit(int id)
         {
-            var service = CreateAdminService();
-            var detail = service.GetAdminByID(id);
+            var detail = _service.GetAdminByID(id);
             var model =
                 new AdminUpdate
                 {
                     AdminID = detail.AdminID,
-                    AdminName = detail.AdminName
+                    CustomerID = detail.CustomerID
                 };
+            CustomerService custSvc = new CustomerService(Guid.Parse(User.Identity.GetUserId()));
+            ViewBag.CustomerID = new SelectList(custSvc.GetCustomer(), "CustomerID", "FullName");
             return View(model);
         }
         [HttpPost]
@@ -73,8 +74,7 @@ namespace BBShop.WebMVC.Controllers
                 ModelState.AddModelError("", "Id Mismatch");
                 return View(model);
             }
-            var service = CreateAdminService();
-            if (service.UpdateAdmin(model))
+            if (_service.UpdateAdmin(model))
             {
                 TempData["SaveResult"] = "Your customer was updated.";
                 return RedirectToAction("Index");
@@ -86,8 +86,7 @@ namespace BBShop.WebMVC.Controllers
         [ActionName("Delete")]
         public ActionResult Delete(int id)
         {
-            var svc = CreateAdminService();
-            var model = svc.GetAdminByID(id);
+            var model = _service.GetAdminByID(id);
 
             return View(model);
         }
@@ -96,16 +95,11 @@ namespace BBShop.WebMVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeletePost(int id)
         {
-            var service = CreateAdminService();
-            service.DeleteAdmin(id);
+
+            _service.DeleteAdmin(id);
             TempData["SaveResult"] = "Your note was deleted";
             return RedirectToAction("Index");
         }
-        private AdminService CreateAdminService()
-        {
-            var userId = Guid.Parse(User.Identity.GetUserId());
-            var service = new AdminService(userId);
-            return service;
-        }
+        
     }
 }

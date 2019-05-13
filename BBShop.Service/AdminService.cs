@@ -10,19 +10,13 @@ namespace BBShop.Service
 {
     public class AdminService
     {
-        private readonly Guid _userID;
-
-        public AdminService(Guid userID)
-        {
-            _userID = userID;
-        }
+        
         public bool CreateAdmin(AdminCreate model)
         {
             var entity =
                 new BBShopAdmin()
                 {
-                    OwnerID = _userID,
-                    AdminName = model.AdminName
+                    CustomerID = model.CustomerID
                 };
 
             using (var ctx = new ApplicationDbContext())
@@ -38,13 +32,12 @@ namespace BBShop.Service
                 var query =
                     ctx
                         .BBShopAdmins
-                        .Where(e => e.OwnerID == _userID)
                         .Select(
                             e =>
                                 new AdminList
                                 {
                                     AdminID = e.AdminID,
-                                    AdminName = e.AdminName
+                                    CustomerID = e.CustomerID
                                 }
                         );
 
@@ -58,12 +51,12 @@ namespace BBShop.Service
                 var entity =
                     ctx
                         .BBShopAdmins
-                        .Single(e => e.AdminID == adminID && e.OwnerID == _userID);
+                        .Single(e => e.AdminID == adminID);
                 return
                     new AdminDetail
                     {
                         AdminID = entity.AdminID,
-                        AdminName = entity.AdminName
+                        CustomerID = entity.CustomerID
                     };
             }
         }
@@ -74,8 +67,8 @@ namespace BBShop.Service
                 var entity =
                     ctx
                         .BBShopAdmins
-                        .Single(e => e.AdminID == model.AdminID && e.OwnerID == _userID);
-                entity.AdminName = model.AdminName;
+                        .Single(e => e.AdminID == model.AdminID);
+                entity.CustomerID = model.CustomerID;
 
                 return ctx.SaveChanges() == 1;
             }
@@ -87,7 +80,7 @@ namespace BBShop.Service
                 var entity =
                     ctx
                         .BBShopAdmins
-                        .Single(e => e.AdminID == adminId && e.OwnerID == _userID);
+                        .Single(e => e.AdminID == adminId);
 
                 ctx.BBShopAdmins.Remove(entity);
 
