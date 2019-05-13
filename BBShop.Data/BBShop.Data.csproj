@@ -54,6 +54,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BBShopAdmin.cs" />
+    <Compile Include="BBShopCustomer.cs" />
+    <Compile Include="BBShopProduct.cs" />
+    <Compile Include="BBShopTransaction.cs" />
     <Compile Include="IdentityModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
